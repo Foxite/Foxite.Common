@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 
 namespace System.Linq {
+	/// <summary>
+	/// Extension methods for <see cref="IEnumerable{T}"/> and some of its derivates.
+	/// </summary>
 	public static class LinqExtensions {
 		/// <summary>
 		/// Returns the index of the first item in the list that returns true when passed into <paramref name="predicate"/>.

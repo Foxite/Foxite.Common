@@ -111,9 +111,7 @@ namespace Foxite.Common {
 		/// This trim all instances of <paramref name="trimString"/> from <paramref name="target"/> from the beginning of <paramref name="target"/>. It will not touch any instances of
 		/// <paramref name="trimString"/> that do not occur at the start of <paramref name="target"/>.
 		/// </summary>
-		/// <seealso cref="TrimStart(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
 		/// <seealso cref="TrimEnd(string, string)"/>
-		/// <seealso cref="TrimEnd(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
 		// Stolen from https://stackoverflow.com/a/4335913
 		public static string TrimStart(this string target, string trimString) {
 			if (string.IsNullOrEmpty(trimString)) return target;
@@ -131,7 +129,6 @@ namespace Foxite.Common {
 		/// <paramref name="trimString"/> that do not occur at the end of <paramref name="target"/>.
 		/// </summary>
 		/// <seealso cref="TrimStart(string, string)"/>
-		/// <seealso cref="TrimStart(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
 		/// <seealso cref="TrimEnd(string, string)"/>
 		// Also https://stackoverflow.com/a/4335913
 		public static string TrimEnd(this string target, string trimString) {

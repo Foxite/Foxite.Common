@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 
 namespace Foxite.Common {
+	/// <summary>
+	/// Utilities for console programs.
+	/// </summary>
 	public static class ConsoleUtil {
 		/// <summary>
 		/// Presents the user with a list of options and returns the zero-indexed number of the option they chose.
