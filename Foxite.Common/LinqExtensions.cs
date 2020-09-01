@@ -303,6 +303,9 @@ namespace System.Linq {
 		/// <summary>
 		/// Returns the items of <paramref name="source"/> in sets of <paramref name="batchSize"/>.
 		/// </summary>
+		/// <remarks>
+		/// https://stackoverflow.com/a/13710023
+		/// </remarks>
 		public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> source, int batchSize) {
 			using (IEnumerator<T> enumerator = source.GetEnumerator()) {
 				while (enumerator.MoveNext()) {
