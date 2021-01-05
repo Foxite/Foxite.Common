@@ -397,6 +397,18 @@ namespace System.Linq {
 			}
 		}
 
+		/// <summary>
+		/// Yields all items in the source enumeration which return a value when passed into <paramref name="selector"/>, which has not been encountered before while encountering.
+		/// </summary>
+		public static IEnumerable<T> DistinctBy<T, TCompare>(this IEnumerable<T> enumerable, Func<T, TCompare> selector) where TCompare : IEquatable<TCompare> {
+			var distinctTC = new HashSet<TCompare>();
+			foreach (T item in enumerable) {
+				if (!distinctTC.Add(selector(item))) {
+					yield return item;
+				}
+			}
+		}
+
 		/* TODO move into net core project
 		public static IAsyncEnumerable<TSelect> Select<TSource, TSelect>(this IAsyncEnumerable<TSource> source, Func<Task<TSource>, TSelect> selector) =>
 			new AsyncSelectEnumerable<TSource, TSelect>(source, selector);
