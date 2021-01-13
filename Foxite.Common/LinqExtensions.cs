@@ -403,7 +403,7 @@ namespace System.Linq {
 		public static IEnumerable<T> DistinctBy<T, TCompare>(this IEnumerable<T> enumerable, Func<T, TCompare> selector) where TCompare : IEquatable<TCompare> {
 			var distinctTC = new HashSet<TCompare>();
 			foreach (T item in enumerable) {
-				if (!distinctTC.Add(selector(item))) {
+				if (distinctTC.Add(selector(item))) {
 					yield return item;
 				}
 			}
