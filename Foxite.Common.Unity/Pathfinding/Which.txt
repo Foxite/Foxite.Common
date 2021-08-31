@@ -1,0 +1,6 @@
+If your agent actually has to explore the map: Greedy Best First (NOTE: probably need to modify it to integrate its frontier exploration with your agent)
+Otherwise,
+If you want to get a path from and to exactly one location: A*
+If you want to get a path from or to all locations:
+- If costs are the same everywhere: Breadth-first
+- If costs vary: Dijkstra

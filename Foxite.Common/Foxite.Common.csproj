@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
 		<Authors>Foxite</Authors>
 		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
 		<Copyright>Public Domain</Copyright>
@@ -14,5 +14,14 @@
 		<FileVersion>1.1.1.0</FileVersion>
 		<Version>1.1.1</Version>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="MailKit" Version="2.15.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+	  <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+	</ItemGroup>
 
 </Project>

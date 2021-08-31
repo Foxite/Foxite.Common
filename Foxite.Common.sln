@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foxite.Common", "Foxite.Common\Foxite.Common.csproj", "{F1529DEF-9222-4012-9CF7-881A65EB8695}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foxite.Common.Core", "Foxite.Common.Core\Foxite.Common.Core.csproj", "{ECE4B0E9-BDAD-4991-8EB2-DB3F50EDC4CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foxite.Common.Unity", "Foxite.Common.Unity\Foxite.Common.Unity.csproj", "{66AAD43C-2192-4F7B-A9EF-B1721EDEEF57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{F1529DEF-9222-4012-9CF7-881A65EB8695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1529DEF-9222-4012-9CF7-881A65EB8695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1529DEF-9222-4012-9CF7-881A65EB8695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECE4B0E9-BDAD-4991-8EB2-DB3F50EDC4CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE4B0E9-BDAD-4991-8EB2-DB3F50EDC4CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE4B0E9-BDAD-4991-8EB2-DB3F50EDC4CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE4B0E9-BDAD-4991-8EB2-DB3F50EDC4CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66AAD43C-2192-4F7B-A9EF-B1721EDEEF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66AAD43C-2192-4F7B-A9EF-B1721EDEEF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66AAD43C-2192-4F7B-A9EF-B1721EDEEF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66AAD43C-2192-4F7B-A9EF-B1721EDEEF57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

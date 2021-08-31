@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace System.Linq {
+namespace Foxite.Common {
 	/// <summary>
 	/// Extension methods for <see cref="IEnumerable{T}"/> and some of its derivates.
 	/// </summary>
@@ -40,6 +42,7 @@ namespace System.Linq {
 		/// </summary>
 		public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T prepend) {
 			yield return prepend;
+
 			foreach (T item in source) {
 				yield return item;
 			}
@@ -49,13 +52,13 @@ namespace System.Linq {
 		/// Returns an IReadOnlyCollection wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects.
 		/// </summary>
 		public static IReadOnlyCollection<TSelect> CollectionSelect<TCollection, TSelect>(this IReadOnlyCollection<TCollection> source, Func<TCollection, TSelect> selector) =>
-			new SelectedCollection<TCollection, TSelect>(source, selector);
+			new SelectedReadOnlyCollection<TCollection, TSelect>(source, selector);
 
-		private class SelectedCollection<TCollection, TSelect> : IReadOnlyCollection<TSelect> {
+		private class SelectedReadOnlyCollection<TCollection, TSelect> : IReadOnlyCollection<TSelect> {
 			private readonly IReadOnlyCollection<TCollection> m_Source;
 			private readonly Func<TCollection, TSelect> m_Selector;
 
-			public SelectedCollection(IReadOnlyCollection<TCollection> source, Func<TCollection, TSelect> selector) {
+			public SelectedReadOnlyCollection(IReadOnlyCollection<TCollection> source, Func<TCollection, TSelect> selector) {
 				m_Source = source;
 				m_Selector = selector;
 			}
@@ -71,16 +74,68 @@ namespace System.Linq {
 		}
 
 		/// <summary>
-		/// Returns an IReadOnlyList wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects and indexing the list.
+		/// Returns an IReadOnlyCollection wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects.
+		/// </summary>
+		public static IReadOnlyCollection<TSelect> CollectionSelect<TCollection, TSelect>(this ICollection<TCollection> source, Func<TCollection, TSelect> selector) =>
+			new SelectedCollection<TCollection, TSelect>(source, selector);
+
+		private class SelectedCollection<TCollection, TSelect> : IReadOnlyCollection<TSelect> {
+			private readonly ICollection<TCollection> m_Source;
+			private readonly Func<TCollection, TSelect> m_Selector;
+
+			public SelectedCollection(ICollection<TCollection> source, Func<TCollection, TSelect> selector) {
+				m_Source = source;
+				m_Selector = selector;
+			}
+
+			public int Count => m_Source.Count;
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+			public IEnumerator<TSelect> GetEnumerator() {
+				foreach (TCollection item in m_Source) {
+					yield return m_Selector(item);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns an IReadOnlyList wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects and indexing the read-only list.
 		/// </summary>
 		public static IReadOnlyList<TSelect> ListSelect<TList, TSelect>(this IReadOnlyList<TList> source, Func<TList, TSelect> selector) =>
-			new SelectedList<TList, TSelect>(source, selector);
+			new SelectedReadOnlyList<TList, TSelect>(source, selector);
 
-		private class SelectedList<TList, TSelect> : IReadOnlyList<TSelect> {
+		private class SelectedReadOnlyList<TList, TSelect> : IReadOnlyList<TSelect> {
 			private readonly IReadOnlyList<TList> m_Source;
 			private readonly Func<TList, TSelect> m_Selector;
 
-			public SelectedList(IReadOnlyList<TList> source, Func<TList, TSelect> selector) {
+			public SelectedReadOnlyList(IReadOnlyList<TList> source, Func<TList, TSelect> selector) {
+				m_Source = source;
+				m_Selector = selector;
+			}
+
+			public int Count => m_Source.Count;
+
+			public TSelect this[int index] => m_Selector(m_Source[index]);
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+			public IEnumerator<TSelect> GetEnumerator() {
+				foreach (TList item in m_Source) {
+					yield return m_Selector(item);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns an IReadOnlyList wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects and indexing the list.
+		/// </summary>
+		public static IReadOnlyList<TSelect> ListSelect<TList, TSelect>(this IList<TList> source, Func<TList, TSelect> selector) =>
+			new SelectedList<TList, TSelect>(source, selector);
+
+		private class SelectedList<TList, TSelect> : IReadOnlyList<TSelect> {
+			private readonly IList<TList> m_Source;
+			private readonly Func<TList, TSelect> m_Selector;
+
+			public SelectedList(IList<TList> source, Func<TList, TSelect> selector) {
 				m_Source = source;
 				m_Selector = selector;
 			}
@@ -135,7 +190,7 @@ namespace System.Linq {
 
 		/// <summary>
 		/// This will enumerate <paramref name="source"/> and determine if the count is equal to <paramref name="count"/>.
-		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
+		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(System.Collections.Generic.IEnumerable{TSource})"/>
 		/// </summary>
 		/// <remarks>
 		/// If <paramref name="source"/> implements <see cref="ICollection{T}"/>, then <see cref="ICollection{T}.Count"/> will be used and <paramref name="source"/>
@@ -162,7 +217,7 @@ namespace System.Linq {
 				return false;
 			}
 		}
-		
+
 		/// <summary>
 		/// This will enumerate <paramref name="source"/> and determine if the count is greater than or equal to <paramref name="count"/>.
 		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
@@ -185,7 +240,7 @@ namespace System.Linq {
 			}
 			return false;
 		}
-		
+
 		/// <summary>
 		/// This will enumerate <paramref name="source"/> and determine if the count is greater than <paramref name="count"/>.
 		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
@@ -208,7 +263,7 @@ namespace System.Linq {
 			}
 			return false;
 		}
-		
+
 		/// <summary>
 		/// This will enumerate <paramref name="source"/> and determine if the count is less than or equal to <paramref name="count"/>.
 		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
@@ -231,7 +286,7 @@ namespace System.Linq {
 			}
 			return true;
 		}
-		
+
 		/// <summary>
 		/// This will enumerate <paramref name="source"/> and determine if the count is less than <paramref name="count"/>.
 		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
@@ -263,6 +318,7 @@ namespace System.Linq {
 				LinkedListNode<T> node = list.First;
 				while (node != null) {
 					yield return node;
+
 					node = node.Next;
 				}
 			}
@@ -283,6 +339,7 @@ namespace System.Linq {
 				LinkedListNode<T> node = list.Last;
 				while (node != null) {
 					yield return node;
+
 					node = node.Previous;
 				}
 			}
@@ -374,7 +431,7 @@ namespace System.Linq {
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// - If <paramref name="key"/> exists in <paramref name="dict"/>, then the value stored at that key will be returned.
 		/// - Otherwise, <paramref name="addValue"/> will be added to <paramref name="dict"/> using <paramref name="key"/>, and then returned from this function.
@@ -409,67 +466,42 @@ namespace System.Linq {
 			}
 		}
 
-		/* TODO move into net core project
-		public static IAsyncEnumerable<TSelect> Select<TSource, TSelect>(this IAsyncEnumerable<TSource> source, Func<Task<TSource>, TSelect> selector) =>
-			new AsyncSelectEnumerable<TSource, TSelect>(source, selector);
+		/// <summary>
+		/// Returns an <see cref="IReadOnlyCollection{T}"/> wrapping <paramref name="source"/>.
+		/// </summary>
+		public static IReadOnlyCollection<T> AsReadonly<T>(this ICollection<T> source) => new ReadOnlyCollection<T>(source);
 
-		private class AsyncSelectEnumerable<TSource, TSelect> : IAsyncEnumerable<TSelect> {
-			private readonly IAsyncEnumerable<TSource> m_Source;
-			private readonly Func<Task<TSource>, TSelect> m_Selector;
+		private class ReadOnlyCollection<T> : IReadOnlyCollection<T> {
+			private readonly ICollection<T> m_Source;
 
-			public AsyncSelectEnumerable(IAsyncEnumerable<TSource> source, Func<Task<TSource>, TSelect> selector) {
+			public int Count => m_Source.Count;
+
+			public ReadOnlyCollection(ICollection<T> source) {
 				m_Source = source;
-				m_Selector = selector;
 			}
 
-			public IAsyncEnumerator<TSelect> GetAsyncEnumerator(CancellationToken cancellationToken = default) =>
-				new AsyncSelectEnumerator(m_Source, m_Selector);
 
-			private class AsyncSelectEnumerator : IAsyncEnumerator<TSelect> {
-				private readonly IAsyncEnumerator<TSource> m_Source;
-				private readonly Func<Task<TSource>, TSelect> m_Selector;
-
-				public AsyncSelectEnumerator(IAsyncEnumerable<TSource> source, Func<Task<TSource>, TSelect> selector) {
-					m_Source = source.GetAsyncEnumerator();
-					m_Selector = selector;
-				}
-
-				public TSelect Current { get; private set; }
-
-				public ValueTask DisposeAsync() => m_Source.DisposeAsync();
-
-				public ValueTask<bool> MoveNextAsync() {
-					ValueTask<bool> valueTask = m_Source.MoveNextAsync();
-					ValueTask<bool> ret = valueTask.Preserve();
-					Current = m_Selector(Task.Run(async () => {
-						await valueTask;
-						return m_Source.Current;
-					}));
-					return ret;
-				}
-			}
+			public IEnumerator<T> GetEnumerator() => m_Source.GetEnumerator();
+			IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)m_Source).GetEnumerator();
 		}
 		
 		/// <summary>
-		/// Yields all items in the source enumeration that are not <see langword="null"/>. This function offers null safety when using C# 8.0 nullable reference types.
+		/// Returns an <see cref="IReadOnlyCollection{T}"/> wrapping <paramref name="source"/>.
 		/// </summary>
-		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class {
-			foreach (T? item in enumerable) {
-				if (!(item is null)) {
-					yield return item;
-				}
-			}
-		}
+		public static IReadOnlyList<T> AsReadonly<T>(this IList<T> source) => new ReadOnlyList<T>(source);
 
-		/// <summary>
-		/// Yields all items in the source enumeration that have a value. This function offers safety when using <see cref="Nullable{T}"/>
-		/// </summary>
-		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : struct {
-			foreach (T? item in enumerable) {
-				if (item.HasValue) {
-					yield return item.Value;
-				}
+		private class ReadOnlyList<T> : IReadOnlyList<T> {
+			private readonly IList<T> m_Source;
+
+			public int Count => m_Source.Count;
+
+			public ReadOnlyList(IList<T> source) {
+				m_Source = source;
 			}
-		}*/
+
+			public IEnumerator<T> GetEnumerator() => m_Source.GetEnumerator();
+			IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)m_Source).GetEnumerator();
+			public T this[int index] => m_Source[index];
+		}
 	}
 }
