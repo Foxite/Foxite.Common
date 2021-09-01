@@ -5,18 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="HexUtil.cs" />
-      <Compile Remove="ObjectPool.cs" />
-      <None Include="NoCompile\HexUtil.cs" />
-      <None Include="NoCompile\ObjectPool.cs" />
-      <None Include="NoCompile\Util.cs" />
-      <Compile Remove="Util.cs" />
-      <Compile Remove="NoCompile\HexUtil.cs" />
-      <None Include="NoCompile\HexUtil.cs" />
-      <Compile Remove="NoCompile\ObjectPool.cs" />
-      <None Include="NoCompile\ObjectPool.cs" />
-      <Compile Remove="NoCompile\Util.cs" />
-      <None Include="NoCompile\Util.cs" />
+        <Compile Remove="NoCompile\HexUtil.cs"/>
+        <Compile Remove="NoCompile\ObjectPool.cs"/>
+        <Compile Remove="NoCompile\Util.cs"/>
+        <None Include="NoCompile\HexUtil.cs"/>
+        <None Include="NoCompile\ObjectPool.cs"/>
+        <None Include="NoCompile\Util.cs"/>
     </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 

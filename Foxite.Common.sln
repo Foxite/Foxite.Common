@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foxite.Common.Core", "Foxit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foxite.Common.Unity", "Foxite.Common.Unity\Foxite.Common.Unity.csproj", "{66AAD43C-2192-4F7B-A9EF-B1721EDEEF57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{476485E2-50CC-493C-9772-D2F24873326B}"
+ProjectSection(SolutionItems) = preProject
+	publish.sh = publish.sh
+	.gitignore = .gitignore
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

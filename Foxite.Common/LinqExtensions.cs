@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Foxite.Common {
+namespace System.Linq {
 	/// <summary>
 	/// Extension methods for <see cref="IEnumerable{T}"/> and some of its derivates.
 	/// </summary>
@@ -74,31 +74,6 @@ namespace Foxite.Common {
 		}
 
 		/// <summary>
-		/// Returns an IReadOnlyCollection wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects.
-		/// </summary>
-		public static IReadOnlyCollection<TSelect> CollectionSelect<TCollection, TSelect>(this ICollection<TCollection> source, Func<TCollection, TSelect> selector) =>
-			new SelectedCollection<TCollection, TSelect>(source, selector);
-
-		private class SelectedCollection<TCollection, TSelect> : IReadOnlyCollection<TSelect> {
-			private readonly ICollection<TCollection> m_Source;
-			private readonly Func<TCollection, TSelect> m_Selector;
-
-			public SelectedCollection(ICollection<TCollection> source, Func<TCollection, TSelect> selector) {
-				m_Source = source;
-				m_Selector = selector;
-			}
-
-			public int Count => m_Source.Count;
-
-			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-			public IEnumerator<TSelect> GetEnumerator() {
-				foreach (TCollection item in m_Source) {
-					yield return m_Selector(item);
-				}
-			}
-		}
-
-		/// <summary>
 		/// Returns an IReadOnlyList wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects and indexing the read-only list.
 		/// </summary>
 		public static IReadOnlyList<TSelect> ListSelect<TList, TSelect>(this IReadOnlyList<TList> source, Func<TList, TSelect> selector) =>
@@ -109,33 +84,6 @@ namespace Foxite.Common {
 			private readonly Func<TList, TSelect> m_Selector;
 
 			public SelectedReadOnlyList(IReadOnlyList<TList> source, Func<TList, TSelect> selector) {
-				m_Source = source;
-				m_Selector = selector;
-			}
-
-			public int Count => m_Source.Count;
-
-			public TSelect this[int index] => m_Selector(m_Source[index]);
-
-			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-			public IEnumerator<TSelect> GetEnumerator() {
-				foreach (TList item in m_Source) {
-					yield return m_Selector(item);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Returns an IReadOnlyList wrapping <paramref name="source"/>, which applies <paramref name="selector"/> when enumerating objects and indexing the list.
-		/// </summary>
-		public static IReadOnlyList<TSelect> ListSelect<TList, TSelect>(this IList<TList> source, Func<TList, TSelect> selector) =>
-			new SelectedList<TList, TSelect>(source, selector);
-
-		private class SelectedList<TList, TSelect> : IReadOnlyList<TSelect> {
-			private readonly IList<TList> m_Source;
-			private readonly Func<TList, TSelect> m_Selector;
-
-			public SelectedList(IList<TList> source, Func<TList, TSelect> selector) {
 				m_Source = source;
 				m_Selector = selector;
 			}
@@ -213,7 +161,7 @@ namespace Foxite.Common {
 				// There were exactly {count}
 				return true;
 			} else {
-				// There were less then {count}
+				// There were less than {count}
 				return false;
 			}
 		}
