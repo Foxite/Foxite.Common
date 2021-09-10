@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace System.Linq {
 	/// <summary>
@@ -450,6 +448,66 @@ namespace System.Linq {
 			public IEnumerator<T> GetEnumerator() => m_Source.GetEnumerator();
 			IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)m_Source).GetEnumerator();
 			public T this[int index] => m_Source[index];
+		}
+
+		public static TSource MaxBy<TSource, TSelect>(this IEnumerable<TSource> source, Func<TSource, TSelect> selector) where TSelect : IComparable<TSelect> {
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
+			if (!enumerator.MoveNext()) {
+				throw new InvalidOperationException("Sequence is empty");
+			}
+			TSource candidate = enumerator.Current;
+			while (enumerator.MoveNext()) {
+				if (selector(candidate).CompareTo(selector(enumerator.Current)) > 0) {
+					candidate = enumerator.Current;
+				}
+			}
+			enumerator.Dispose();
+			return candidate;
+		}
+
+		public static TSource MinBy<TSource, TSelect>(this IEnumerable<TSource> source, Func<TSource, TSelect> selector) where TSelect : IComparable<TSelect> {
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
+			if (!enumerator.MoveNext()) {
+				throw new InvalidOperationException("Sequence is empty");
+			}
+			TSource candidate = enumerator.Current;
+			while (enumerator.MoveNext()) {
+				if (selector(candidate).CompareTo(selector(enumerator.Current)) < 0) {
+					candidate = enumerator.Current;
+				}
+			}
+			enumerator.Dispose();
+			return candidate;
+		}
+
+		public static TSource MaxBy<TSource, TSelect>(this IEnumerable<TSource> source, Func<TSource, TSelect> selector, IComparer<TSelect> comparer) {
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
+			if (!enumerator.MoveNext()) {
+				throw new InvalidOperationException("Sequence is empty");
+			}
+			TSource candidate = enumerator.Current;
+			while (enumerator.MoveNext()) {
+				if (comparer.Compare(selector(candidate), selector(enumerator.Current)) > 0) {
+					candidate = enumerator.Current;
+				}
+			}
+			enumerator.Dispose();
+			return candidate;
+		}
+
+		public static TSource MinBy<TSource, TSelect>(this IEnumerable<TSource> source, Func<TSource, TSelect> selector, IComparer<TSelect> comparer) {
+			IEnumerator<TSource> enumerator = source.GetEnumerator();
+			if (!enumerator.MoveNext()) {
+				throw new InvalidOperationException("Sequence is empty");
+			}
+			TSource candidate = enumerator.Current;
+			while (enumerator.MoveNext()) {
+				if (comparer.Compare(selector(candidate), selector(enumerator.Current)) < 0) {
+					candidate = enumerator.Current;
+				}
+			}
+			enumerator.Dispose();
+			return candidate;
 		}
 	}
 }
