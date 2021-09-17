@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Discord.Net.Webhook" Version="2.4.0" />
         <PackageReference Include="MailKit" Version="2.15.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
