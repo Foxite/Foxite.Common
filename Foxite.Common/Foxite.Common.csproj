@@ -10,10 +10,10 @@
         <RepositoryUrl>https://github.com/Foxite/Foxite.Common</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.4.0</AssemblyVersion>
-        <FileVersion>1.4.0</FileVersion>
-        <Version>1.4.0</Version>
-        <PackageVersion>1.4.0</PackageVersion>
+        <AssemblyVersion>1.4.1</AssemblyVersion>
+        <FileVersion>1.4.1</FileVersion>
+        <Version>1.4.1</Version>
+        <PackageVersion>1.4.1</PackageVersion>
     </PropertyGroup>
     
     <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0'">
