@@ -15,7 +15,6 @@ namespace Microsoft.Extensions.DependencyInjection {
 		}
 
 		public static INotificationBuilder AddDiscord(this INotificationBuilder builder, IConfiguration discordConfiguration) {
-			Console.WriteLine(string.Join('\n', discordConfiguration.AsEnumerable().Select(kvp => kvp.ToString())));
 			builder.Services.Configure<DiscordNotificationSender.Config>(discordConfiguration);
 			builder.AddSender<DiscordNotificationSender>();
 			return builder;
