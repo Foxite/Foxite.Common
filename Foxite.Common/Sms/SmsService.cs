@@ -8,6 +8,8 @@ namespace Foxite.Common.Sms {
 		public SmsService(ISmsSender sender) {
 			m_Sender = sender;
 		}
+		
+		public Task SendSmsAsync(string recipient, string content) => SendSmsAsync(new[] { recipient }, content);
 
 		public async Task SendSmsAsync(string[] recipients, string content) {
 			try {
