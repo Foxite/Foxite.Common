@@ -14,9 +14,16 @@ namespace Microsoft.Extensions.DependencyInjection {
 			return ret;
 		}
 
+		// Archived, see DiscordNetNotificationSender.cs
+		// public static INotificationBuilder AddDiscord(this INotificationBuilder builder, IConfiguration discordConfiguration) {
+		// 	builder.Services.Configure<DiscordNetNotificationSender.Config>(discordConfiguration);
+		// 	builder.AddSender<DiscordNetNotificationSender>();
+		// 	return builder;
+		// }
+		
 		public static INotificationBuilder AddDiscord(this INotificationBuilder builder, IConfiguration discordConfiguration) {
-			builder.Services.Configure<DiscordNotificationSender.Config>(discordConfiguration);
-			builder.AddSender<DiscordNotificationSender>();
+			builder.Services.Configure<DiscordWebhookLibNotificationSender.Config>(discordConfiguration);
+			builder.AddSender<DiscordWebhookLibNotificationSender>();
 			return builder;
 		}
 	}

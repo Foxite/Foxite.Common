@@ -10,10 +10,10 @@
         <RepositoryUrl>https://github.com/Foxite/Foxite.Common</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.5.1</AssemblyVersion>
-        <FileVersion>1.5.1</FileVersion>
-        <Version>1.5.1</Version>
-        <PackageVersion>1.5.1</PackageVersion>
+        <AssemblyVersion>1.5.2</AssemblyVersion>
+        <FileVersion>1.5.2</FileVersion>
+        <Version>1.5.2</Version>
+        <PackageVersion>1.5.2</PackageVersion>
     </PropertyGroup>
     
     <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0'">
@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.Net.Webhook" Version="2.4.0" />
+        <PackageReference Include="DiscordWebhookLib" Version="1.0.0" />
         <PackageReference Include="MailKit" Version="2.15.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
