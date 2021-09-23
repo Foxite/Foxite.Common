@@ -8,7 +8,7 @@ namespace Foxite.Common.Notifications {
 		private readonly Dictionary<Type, INotificationSender> m_Senders;
 		private readonly ILogger<NotificationService> m_Logger;
 
-		public NotificationService(ILogger<NotificationService> logger = null) {
+		public NotificationService(ILogger<NotificationService> logger) {
 			m_Logger = logger;
 			m_Senders = new Dictionary<Type, INotificationSender>();
 		}
@@ -22,7 +22,7 @@ namespace Foxite.Common.Notifications {
 				try {
 					await sender.SendNotificationAsync(message);
 				} catch (Exception e) {
-					m_Logger?.LogCritical(e, "Unable to send notification via sender {0}", type.FullName);
+					m_Logger.LogCritical(e, $"Unable to send notification via sender {type.FullName}");
 				}
 			}
 		}

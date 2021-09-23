@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
@@ -23,7 +22,7 @@ namespace Foxite.Common.Sms {
 			m_Route = options.Route;
 		}
 		
-		public async Task SendSmsAsync(string number, string content) {
+		public async Task SendSmsAsync(string[] recipients, string content) {
 			var result = await m_Http.SendAsync(new HttpRequestMessage(HttpMethod.Post, "https://rest.spryngsms.com/v1/messages") {
 				Headers = {
 					Authorization = new AuthenticationHeaderValue("Bearer", m_ApiKey)
@@ -33,7 +32,7 @@ namespace Foxite.Common.Sms {
 					body = content,
 					originator = m_Originator,
 					route = m_Route,
-					recipients = number
+					recipients = recipients
 				})
 			});
 			result.EnsureSuccessStatusCode();

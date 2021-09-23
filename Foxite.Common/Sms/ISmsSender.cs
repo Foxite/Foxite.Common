@@ -2,6 +2,6 @@ using System.Threading.Tasks;
 
 namespace Foxite.Common.Sms {
 	public interface ISmsSender {
-		public Task SendSmsAsync(string number, string content);
+		public Task SendSmsAsync(string[] recipients, string content);
 	}
 }

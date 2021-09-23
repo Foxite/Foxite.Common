@@ -12,8 +12,8 @@ namespace Foxite.Common.Sms {
 			m_Logger = logger;
 		}
 
-		public Task SendSmsAsync(string number, string content) {
-			m_Logger.LogInformation($"Not sending SMS to {number}: {content}");
+		public Task SendSmsAsync(string[] recipients, string content) {
+			m_Logger.LogInformation($"Not sending SMS to {string.Join(", ", recipients)}: {content}");
 			return Task.CompletedTask;
 		}
 	}

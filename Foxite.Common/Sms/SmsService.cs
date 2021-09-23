@@ -9,11 +9,11 @@ namespace Foxite.Common.Sms {
 			m_Sender = sender;
 		}
 
-		public async Task SendSmsAsync(string number, string content) {
+		public async Task SendSmsAsync(string[] recipients, string content) {
 			try {
-				await m_Sender.SendSmsAsync(number, content);
+				await m_Sender.SendSmsAsync(recipients, content);
 			} catch (Exception e) {
-				throw new SmsException($"Could not send SMS with {content.Length} characters to number: {number}", e);
+				throw new SmsException($"Could not send SMS with {content.Length} characters to recipients: {string.Join(", ", recipients)}", e);
 			}
 		}
 	}
