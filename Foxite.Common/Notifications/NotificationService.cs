@@ -17,6 +17,10 @@ namespace Foxite.Common.Notifications {
 			return m_Senders.TryAdd(sender.GetType(), sender);
 		}
 
+		public Task SendNotificationAsync(FormattableString message) {
+			return SendNotificationAsync(message.ToString());
+		}
+
 		public async Task SendNotificationAsync(string message) {
 			foreach ((Type type, INotificationSender sender) in m_Senders) {
 				try {

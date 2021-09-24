@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using DiscordWebhookLib;
+using Microsoft.Extensions.Options;
 
 namespace Foxite.Common.Notifications {
 	public class DiscordWebhookLibNotificationSender : INotificationSender {
 		private readonly DiscordWebhookExecutor m_Executor;
 		
-		public DiscordWebhookLibNotificationSender(Config config) {
-			m_Executor= new DiscordWebhookExecutor(config.WebhookUrl);
+		public DiscordWebhookLibNotificationSender(IOptions<Config> config) {
+			m_Executor = new DiscordWebhookExecutor(config.Value.WebhookUrl);
 		}
 		
 		public Task SendNotificationAsync(string message) {
