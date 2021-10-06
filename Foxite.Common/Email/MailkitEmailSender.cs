@@ -14,12 +14,12 @@ namespace Foxite.Common.Email {
 			m_Options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
 		}
 
-		public async Task SendEmailAsync(string email, string subject, string htmlMessage, IDictionary<string, string> headers = null) {
+		public async Task SendEmailAsync(string email, string subject, string htmlMessage, IDictionary<string, string>? headers = null) {
 			var msg = new MimeMessage();
 
 			if (headers != null) {
-				foreach (KeyValuePair<string, string> kvp in headers) {
-					msg.Headers[kvp.Key] = kvp.Value;
+				foreach ((string key, string value) in headers) {
+					msg.Headers[key] = value;
 				}
 			}
 
@@ -42,12 +42,25 @@ namespace Foxite.Common.Email {
 	}
 
 	public class MailkitEmailOptions {
-		public string SmtpServerAddress { get; set; }
-		public int SmtpServerPort { get; set; } = 465;
-		public bool EnableSsl { get; set; } = true;
-		public string SenderAccount { get; set; }
-		public string SenderPassword { get; set; }
-		public string SenderDisplayName { get; set; }
-		public string SenderAddress { get; set; }
+		public string SmtpServerAddress { get; }
+		public int SmtpServerPort { get; }
+		/// <summary>
+		/// When using STARTTLS, set this to false and use 587 for <see cref="SmtpServerPort"/>.
+		/// </summary>
+		public bool EnableSsl { get; }
+		public string SenderAccount { get; }
+		public string SenderPassword { get; }
+		public string SenderDisplayName { get; }
+		public string SenderAddress { get; }
+		
+		public MailkitEmailOptions(string smtpServerAddress, int smtpServerPort, bool enableSsl, string senderAccount, string senderPassword, string senderDisplayName, string senderAddress) {
+			SmtpServerAddress = smtpServerAddress;
+			SmtpServerPort = smtpServerPort;
+			EnableSsl = enableSsl;
+			SenderAccount = senderAccount;
+			SenderPassword = senderPassword;
+			SenderDisplayName = senderDisplayName;
+			SenderAddress = senderAddress;
+		}
 	}
 }

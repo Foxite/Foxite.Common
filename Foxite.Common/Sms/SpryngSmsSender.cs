@@ -43,5 +43,11 @@ namespace Foxite.Common.Sms {
 		public string ApiKey { get; set; }
 		public string Originator { get; set; }
 		public string Route { get; set; }
+		
+		public SpryngOptions(string apiKey, string originator, string route) {
+			ApiKey = apiKey;
+			Originator = originator;
+			Route = route;
+		}
 	}
 }

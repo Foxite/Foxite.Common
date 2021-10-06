@@ -261,7 +261,7 @@ namespace System.Linq {
 		/// </summary>
 		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
 			if (list.Count > 0) {
-				LinkedListNode<T> node = list.First;
+				LinkedListNode<T>? node = list.First;
 				while (node != null) {
 					yield return node;
 
@@ -282,7 +282,7 @@ namespace System.Linq {
 		/// </remarks>
 		public static IEnumerable<LinkedListNode<T>> Backwards<T>(this LinkedList<T> list) {
 			if (list.Count > 0) {
-				LinkedListNode<T> node = list.Last;
+				LinkedListNode<T>? node = list.Last;
 				while (node != null) {
 					yield return node;
 
@@ -313,10 +313,9 @@ namespace System.Linq {
 		/// https://stackoverflow.com/a/13710023
 		/// </remarks>
 		public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> source, int batchSize) {
-			using (IEnumerator<T> enumerator = source.GetEnumerator()) {
-				while (enumerator.MoveNext()) {
-					yield return YieldBatchElements(enumerator, batchSize - 1);
-				}
+			using IEnumerator<T> enumerator = source.GetEnumerator();
+			while (enumerator.MoveNext()) {
+				yield return YieldBatchElements(enumerator, batchSize - 1);
 			}
 		}
 
@@ -351,9 +350,9 @@ namespace System.Linq {
 		/// </summary>
 		/// <param name="enumerable">The source enumerable.</param>
 		/// <param name="equalityComparer">Uses <see cref="EqualityComparer{T}.Default"/> if null.</param>
-		public static IEnumerable<T> Duplicates<T>(this IEnumerable<T> enumerable, IEqualityComparer<T> equalityComparer = null) {
+		public static IEnumerable<T> Duplicates<T>(this IEnumerable<T> enumerable, IEqualityComparer<T>? equalityComparer = null) {
 			var d = new HashSet<T>(equalityComparer ?? EqualityComparer<T>.Default);
-			foreach (var t in enumerable) {
+			foreach (T t in enumerable) {
 				if (!d.Add(t)) {
 					yield return t;
 				}
@@ -369,7 +368,7 @@ namespace System.Linq {
 		/// <param name="enumerable">The source enumerable.</param>
 		/// <param name="equalityComparer">Uses <see cref="EqualityComparer{T}.Default"/> if null.</param>
 		/// <param name="selector">Determine equality based on this selector.</param>
-		public static IEnumerable<TSource> Duplicates<TSource, TValue>(this IEnumerable<TSource> enumerable, Func<TSource, TValue> selector, IEqualityComparer<TValue> equalityComparer = null) {
+		public static IEnumerable<TSource> Duplicates<TSource, TValue>(this IEnumerable<TSource> enumerable, Func<TSource, TValue> selector, IEqualityComparer<TValue>? equalityComparer = null) {
 			var d = new HashSet<TValue>(equalityComparer ?? EqualityComparer<TValue>.Default);
 			foreach (var t in enumerable) {
 				if (!d.Add(selector(t))) {
@@ -382,7 +381,7 @@ namespace System.Linq {
 		/// - If <paramref name="key"/> exists in <paramref name="dict"/>, then the value stored at that key will be returned.
 		/// - Otherwise, <paramref name="addValue"/> will be added to <paramref name="dict"/> using <paramref name="key"/>, and then returned from this function.
 		/// </summary>
-		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue addValue) {
+		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue addValue) where TKey : notnull {
 			return dict.GetOrAdd(key, _ => addValue);
 		}
 
@@ -390,8 +389,10 @@ namespace System.Linq {
 		/// - If <paramref name="key"/> exists in <paramref name="dict"/>, then the value stored at that key will be returned.
 		/// - Otherwise, the return value of <paramref name="addFactory"/> will be added to <paramref name="dict"/> using <paramref name="key"/>, and then returned from this function.
 		/// </summary>
-		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> addFactory) {
+		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> addFactory) where TKey : notnull {
+#pragma warning disable 8600
 			if (dict.TryGetValue(key, out TValue value)) {
+#pragma warning restore 8600
 				return value;
 			} else {
 				TValue ret = addFactory(key);
@@ -404,9 +405,9 @@ namespace System.Linq {
 		/// Yields all items in the source enumeration which return a value when passed into <paramref name="selector"/>, which has not been encountered before while encountering.
 		/// </summary>
 		public static IEnumerable<T> DistinctBy<T, TCompare>(this IEnumerable<T> enumerable, Func<T, TCompare> selector) where TCompare : IEquatable<TCompare> {
-			var distinctTC = new HashSet<TCompare>();
+			HashSet<TCompare> distinctTc = new HashSet<TCompare>();
 			foreach (T item in enumerable) {
-				if (distinctTC.Add(selector(item))) {
+				if (distinctTc.Add(selector(item))) {
 					yield return item;
 				}
 			}
@@ -508,6 +509,30 @@ namespace System.Linq {
 			}
 			enumerator.Dispose();
 			return candidate;
+		}
+		
+		/// <summary>
+		/// Yields all items in the source enumeration that are not <see langword="null"/>. This function offers null safety when using C# 8.0 nullable reference types.
+		/// </summary>
+		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class {
+			// ReSharper disable once LoopCanBeConvertedToQuery
+			foreach (T? item in enumerable) {
+				if (!(item is null)) {
+					yield return item;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Yields all items in the source enumeration that have a value. This function offers safety when using <see cref="Nullable{T}"/>
+		/// </summary>
+		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : struct {
+			// ReSharper disable once LoopCanBeConvertedToQuery
+			foreach (T? item in enumerable) {
+				if (item.HasValue) {
+					yield return item.Value;
+				}
+			}
 		}
 	}
 }

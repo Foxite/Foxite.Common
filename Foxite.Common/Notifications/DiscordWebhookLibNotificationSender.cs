@@ -25,7 +25,11 @@ namespace Foxite.Common.Notifications {
 		}
 
 		public class Config {
-			public string WebhookUrl { get; set; } = null!;
+			public string WebhookUrl { get; }
+			
+			public Config(string webhookUrl) {
+				WebhookUrl = webhookUrl;
+			}
 		}
 	}
 }

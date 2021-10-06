@@ -13,13 +13,6 @@ namespace Microsoft.Extensions.DependencyInjection {
 			services.AddSingleton(isp => ret.Build(isp));
 			return ret;
 		}
-
-		// Archived, see DiscordNetNotificationSender.cs
-		// public static INotificationBuilder AddDiscord(this INotificationBuilder builder, IConfiguration discordConfiguration) {
-		// 	builder.Services.Configure<DiscordNetNotificationSender.Config>(discordConfiguration);
-		// 	builder.AddSender<DiscordNetNotificationSender>();
-		// 	return builder;
-		// }
 		
 		public static INotificationBuilder AddDiscord(this INotificationBuilder builder, IConfiguration discordConfiguration) {
 			builder.Services.Configure<DiscordWebhookLibNotificationSender.Config>(discordConfiguration);

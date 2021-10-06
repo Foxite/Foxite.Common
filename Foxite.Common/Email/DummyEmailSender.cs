@@ -12,7 +12,7 @@ namespace Foxite.Common.Email {
 			m_Logger = logger;
 		}
 
-		public Task SendEmailAsync(string email, string subject, string htmlMessage, IDictionary<string, string> headers) {
+		public Task SendEmailAsync(string email, string subject, string htmlMessage, IDictionary<string, string>? headers) {
 			string message = $"Not sending email to {email} with subject {subject}:\n";
 
 			if (headers != null) {

@@ -11,17 +11,14 @@
         <RepositoryUrl>https://github.com/Foxite/Foxite.Common</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.5.4</AssemblyVersion>
-        <FileVersion>1.5.4</FileVersion>
-        <Version>1.5.4</Version>
-        <PackageVersion>1.5.4</PackageVersion>
+        <AssemblyVersion>1.5.5</AssemblyVersion>
+        <FileVersion>1.5.5</FileVersion>
+        <Version>1.5.5</Version>
+        <PackageVersion>1.5.5</PackageVersion>
     </PropertyGroup>
-    
-    <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0'">
-        <ProjectReference Include="../Foxite.Common.Core/Foxite.Common.Core.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Ben.Demystifier" Version="0.4.1" />
         <PackageReference Include="DiscordWebhookLib" Version="1.0.0" />
         <PackageReference Include="MailKit" Version="2.15.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
