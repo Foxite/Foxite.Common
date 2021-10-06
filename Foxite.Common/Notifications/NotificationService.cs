@@ -22,6 +22,7 @@ namespace Foxite.Common.Notifications {
 		}
 
 		public async Task SendNotificationAsync(string message, Exception? exception = null) {
+			// Cannot log the notification here because it should be done using the ILogger<> of the caller.
 			foreach ((Type type, INotificationSender sender) in m_Senders) {
 				try {
 					await sender.SendNotificationAsync(message, exception);
