@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using DiscordWebhookLib;
 using Microsoft.Extensions.Options;
@@ -10,8 +12,16 @@ namespace Foxite.Common.Notifications {
 			m_Executor = new DiscordWebhookExecutor(config.Value.WebhookUrl);
 		}
 		
-		public Task SendNotificationAsync(string message) {
-			return m_Executor.Execute(DiscordStringUtil.CapLength(message, 1999));
+		public Task SendNotificationAsync(string message, Exception? exception) {
+			if (exception != null) {
+				message += "\n```csharp\n" + exception.ToStringDemystified();
+				message = DiscordStringUtil.CapLength(message, 1996);
+				message += "```";
+			} else {
+				message = DiscordStringUtil.CapLength(message, 1999);
+			}
+			
+			return m_Executor.Execute(message);
 		}
 
 		public class Config {

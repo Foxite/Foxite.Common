@@ -17,14 +17,14 @@ namespace Foxite.Common.Notifications {
 			return m_Senders.TryAdd(sender.GetType(), sender);
 		}
 
-		public Task SendNotificationAsync(FormattableString message) {
-			return SendNotificationAsync(message.ToString());
+		public Task SendNotificationAsync(FormattableString message, Exception? exception = null) {
+			return SendNotificationAsync(message.ToString(), exception);
 		}
 
-		public async Task SendNotificationAsync(string message) {
+		public async Task SendNotificationAsync(string message, Exception? exception = null) {
 			foreach ((Type type, INotificationSender sender) in m_Senders) {
 				try {
-					await sender.SendNotificationAsync(message);
+					await sender.SendNotificationAsync(message, exception);
 				} catch (Exception e) {
 					m_Logger.LogCritical(e, $"Unable to send notification via sender {type.FullName}");
 				}
