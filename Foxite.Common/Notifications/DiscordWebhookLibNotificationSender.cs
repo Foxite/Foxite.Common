@@ -25,11 +25,8 @@ namespace Foxite.Common.Notifications {
 		}
 
 		public class Config {
-			public string WebhookUrl { get; }
-			
-			public Config(string webhookUrl) {
-				WebhookUrl = webhookUrl;
-			}
+			// Dont turn this into a constructor with parameters because then DI wont be able to construct it
+			public string WebhookUrl { get; set; } = null!;
 		}
 	}
 }

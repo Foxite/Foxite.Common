@@ -40,14 +40,9 @@ namespace Foxite.Common.Sms {
 	}
 
 	public class SpryngOptions {
-		public string ApiKey { get; set; }
-		public string Originator { get; set; }
-		public string Route { get; set; }
-		
-		public SpryngOptions(string apiKey, string originator, string route) {
-			ApiKey = apiKey;
-			Originator = originator;
-			Route = route;
-		}
+		// Dont turn this into a constructor with parameters because then DI wont be able to construct it
+		public string ApiKey { get; set; } = null!;
+		public string Originator { get; set; } = null!;
+		public string Route { get; set; } = null!;
 	}
 }
