@@ -22,3 +22,5 @@ jobs:
         NUGET_KEY: ${{ secrets.PUSH_KEY }}
         # NuGet server uri hosting the packages, defaults to https://api.nuget.org
         NUGET_SOURCE: ${{ secrets.PUSH_REPO }}
+        # Format of the git tag, [*] gets replaced with actual version
+        TAG_FORMAT: *
