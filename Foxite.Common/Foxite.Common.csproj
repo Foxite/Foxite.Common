@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;netcoreapp3.1;net5.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;netstandard2.1</TargetFrameworks>
         <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
         <Authors>Foxite</Authors>
         <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
@@ -11,22 +11,22 @@
         <RepositoryUrl>https://github.com/Foxite/Foxite.Common</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.5.5</AssemblyVersion>
-        <FileVersion>1.5.5</FileVersion>
-        <Version>1.5.5</Version>
-        <PackageVersion>1.5.5</PackageVersion>
+        <AssemblyVersion>1.5.6</AssemblyVersion>
+        <FileVersion>1.5.6</FileVersion>
+        <Version>1.5.6</Version>
+        <PackageVersion>1.5.6</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Ben.Demystifier" Version="0.4.1" />
         <PackageReference Include="DiscordWebhookLib" Version="1.0.0" />
         <PackageReference Include="MailKit" Version="2.15.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-        <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
+        <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     </ItemGroup>
 
 </Project>
