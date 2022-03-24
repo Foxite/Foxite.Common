@@ -11,10 +11,6 @@
         <RepositoryUrl>https://github.com/Foxite/Foxite.Common</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.5.7</AssemblyVersion>
-        <FileVersion>1.5.7</FileVersion>
-        <Version>1.5.7</Version>
-        <PackageVersion>1.5.7</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
