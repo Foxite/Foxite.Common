@@ -13,7 +13,7 @@ namespace Foxite.Common {
 			LogTrace(logger, null, eventId, formattableString);
 		}
 		public static void LogTrace(this ILogger logger, Exception? exception, EventId eventId, FormattableString formattableString) {
-			logger.Log(LogLevel.Trace, eventId, formattableString, exception, (obj, ex) => obj.ToString()); // Exactly how the builtin LoggerExtensions does it
+			Log(logger, LogLevel.Trace, exception, eventId, formattableString);
 		}
 
 		public static void LogDebug(this ILogger logger, FormattableString formattableString) {
@@ -26,7 +26,7 @@ namespace Foxite.Common {
 			LogDebug(logger, null, eventId, formattableString);
 		}
 		public static void LogDebug(this ILogger logger, Exception? exception, EventId eventId, FormattableString formattableString) {
-			logger.Log(LogLevel.Debug, eventId, formattableString, exception, (obj, ex) => obj.ToString()); // Exactly how the builtin LoggerExtensions does it
+			Log(logger, LogLevel.Debug, exception, eventId, formattableString);
 		}
 		
 		public static void LogInformation(this ILogger logger, FormattableString formattableString) {
@@ -39,7 +39,7 @@ namespace Foxite.Common {
 			LogInformation(logger, null, eventId, formattableString);
 		}
 		public static void LogInformation(this ILogger logger, Exception? exception, EventId eventId, FormattableString formattableString) {
-			logger.Log(LogLevel.Information, eventId, formattableString, exception, (obj, ex) => obj.ToString()); // Exactly how the builtin LoggerExtensions does it
+			Log(logger, LogLevel.Information, exception, eventId, formattableString);
 		}
 		
 		public static void LogWarning(this ILogger logger, FormattableString formattableString) {
@@ -52,7 +52,7 @@ namespace Foxite.Common {
 			LogWarning(logger, null, eventId, formattableString);
 		}
 		public static void LogWarning(this ILogger logger, Exception? exception, EventId eventId, FormattableString formattableString) {
-			logger.Log(LogLevel.Warning, eventId, formattableString, exception, (obj, ex) => obj.ToString()); // Exactly how the builtin LoggerExtensions does it
+			Log(logger, LogLevel.Warning, exception, eventId, formattableString);
 		}
 		
 		public static void LogError(this ILogger logger, FormattableString formattableString) {
@@ -65,7 +65,7 @@ namespace Foxite.Common {
 			LogError(logger, null, eventId, formattableString);
 		}
 		public static void LogError(this ILogger logger, Exception? exception, EventId eventId, FormattableString formattableString) {
-			logger.Log(LogLevel.Error, eventId, formattableString, exception, (obj, ex) => obj.ToString()); // Exactly how the builtin LoggerExtensions does it
+			Log(logger, LogLevel.Error, exception, eventId, formattableString);
 		}
 		
 		public static void LogCritical(this ILogger logger, FormattableString formattableString) {
@@ -78,8 +78,20 @@ namespace Foxite.Common {
 			LogCritical(logger, null, eventId, formattableString);
 		}
 		public static void LogCritical(this ILogger logger, Exception? exception, EventId eventId, FormattableString formattableString) {
-			logger.Log(LogLevel.Critical, eventId, formattableString, exception, (obj, ex) => obj.ToString()); // Exactly how the builtin LoggerExtensions does it
+			Log(logger, LogLevel.Critical, exception, eventId, formattableString);
 		}
 		
+		public static void Log(this ILogger logger, LogLevel level, FormattableString formattableString) {
+			Log(logger, level, null, default, formattableString);
+		}
+		public static void Log(this ILogger logger, LogLevel level, Exception? exception, FormattableString formattableString) {
+			Log(logger, level, exception, default, formattableString);
+		}
+		public static void Log(this ILogger logger, LogLevel level, EventId eventId, FormattableString formattableString) {
+			Log(logger, level, null, eventId, formattableString);
+		}
+		public static void Log(this ILogger logger, LogLevel level, Exception? exception, EventId eventId, FormattableString formattableString) {
+			logger.Log(level, eventId, exception, formattableString.Format, formattableString.GetArguments());
+		}
 	}
 }
