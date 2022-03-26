@@ -4,13 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Foxite.Common.AsyncLinq {
-	// I originally wrote these functions not knowing why they weren't there in the first place.
-	// And I still don't know, but what I do know now is that they interfere with Entity Framework's DbSets.
-	// These derive from IQueryable and IAsyncEnumerable. IQueryable has all the LINQ extensions you need, except they take Expression<Func<...>> instead of Func<...>.
-	// The difference between these is that Expressions can be analyzed at runtime and turned into some other language, like SQL.
-	// By adding Select to IAsyncEnumerable you can no longer call Select on DbSets because the compiler won't know if you want the IQueryable or IAsyncEnumerable extension.
-	// So to avoid having to call .AsQueryable on every single DbSet ever if you reference Foxite.Common, these functions are in their own namespace rather than System.Linq,
-	//  so you can decide if you want this per-file (or even just calling these as static functions).
+	// These are in a separate namespace to avoid conflicts with EntityFramework
 	public static class AsyncLinqExtensions {
 		public static IAsyncEnumerable<TSelect> Select<TSource, TSelect>(this IAsyncEnumerable<TSource> source, Func<TSource, TSelect> selector) =>
 			new AsyncSelectEnumerable<TSource, TSelect>(source, selector);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Foxite.Common {
 	/// <summary>
@@ -199,8 +200,52 @@ namespace Foxite.Common {
 			}
 			return d[n, m];
 		}
+		
+		public static string JoinOxfordComma(ICollection<string> strings) {
+			var ret = new StringBuilder();
+			int i = 0;
+			foreach (string str in strings) {
+				if (i > 0) {
+					if (strings.Count != 2) {
+						ret.Append(',');
+					}
 
-		/* TODO move to .net core project
+					ret.Append(' ');
+
+					if (i == strings.Count - 1) {
+						ret.Append("and ");
+					}
+				}
+
+				ret.Append(str);
+			
+				i++;
+			}
+
+			return ret.ToString();
+		}
+
+		public static string Ellipsis(this string str, int maxLength, string ellipsis = "…") {
+			if (str.Length > maxLength) {
+				return str[..(maxLength - ellipsis.Length)] + ellipsis;
+			} else {
+				return str;
+			}
+		}
+
+		public static string Join(this IEnumerable<string> source, string joiner) {
+			return string.Join(joiner, source);
+		}
+		
+		private static readonly Regex s_SplitCamelCaseRegex1 = new Regex(@"(\P{Ll})(\P{Ll}\p{Ll})");
+		private static readonly Regex s_SplitCamelCaseRegex2 = new Regex(@"(\p{Ll})(\P{Ll})");
+		public static string SplitCamelCase(this string str) {
+			return s_SplitCamelCaseRegex2.Replace(
+				s_SplitCamelCaseRegex1.Replace(str, "$1 $2"),
+				"$1 $2"
+			);
+		}
+
 		/// <summary>
 		/// This trim all instances of <paramref name="trimString"/> from <paramref name="target"/> from the end of <paramref name="target"/>. It will not touch any instances of
 		/// <paramref name="trimString"/> that do not occur at the end of <paramref name="target"/>.
@@ -237,6 +282,6 @@ namespace Foxite.Common {
 			}
 
 			return result;
-		}*/
+		}
 	}
 }

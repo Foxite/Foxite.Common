@@ -9,7 +9,7 @@ namespace Foxite.Common {
 		/// <summary>
 		/// Presents the user with a list of options and returns the zero-indexed number of the option they chose.
 		/// </summary>
-		public static int ConsoleChoiceMenu(string question, params string[] options) => ConsoleChoiceMenu(question, options);
+		public static int ConsoleChoiceMenu(string question, params string[] options) => ConsoleChoiceMenu(question, (IReadOnlyList<string>) options);
 		
 		/// <summary>
 		/// Presents the user with a list of options and returns the zero-indexed number of the option they chose.
