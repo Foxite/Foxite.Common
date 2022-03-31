@@ -42,16 +42,19 @@ namespace Foxite.Common.Email {
 	}
 
 	public class MailkitEmailOptions {
-		public string SmtpServerAddress { get; }
-		public int SmtpServerPort { get; }
+		public string SmtpServerAddress { get; set; }
+		public int SmtpServerPort { get; set; }
 		/// <summary>
 		/// When using STARTTLS, set this to false and use 587 for <see cref="SmtpServerPort"/>.
 		/// </summary>
-		public bool EnableSsl { get; }
-		public string SenderAccount { get; }
-		public string SenderPassword { get; }
-		public string SenderDisplayName { get; }
-		public string SenderAddress { get; }
+		public bool EnableSsl { get; set; }
+		public string SenderAccount { get; set; }
+		public string SenderPassword { get; set; }
+		public string SenderDisplayName { get; set; }
+		public string SenderAddress { get; set; }
+
+		// Dont remove this constructor because then DI wont be able to construct it
+		public MailkitEmailOptions() { }
 		
 		public MailkitEmailOptions(string smtpServerAddress, int smtpServerPort, bool enableSsl, string senderAccount, string senderPassword, string senderDisplayName, string senderAddress) {
 			SmtpServerAddress = smtpServerAddress;
