@@ -64,11 +64,7 @@ namespace System.Linq {
 			public int Count => m_Source.Count;
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-			public IEnumerator<TSelect> GetEnumerator() {
-				foreach (TCollection item in m_Source) {
-					yield return m_Selector(item);
-				}
-			}
+			public IEnumerator<TSelect> GetEnumerator() => m_Source.Select(m_Selector).GetEnumerator();
 		}
 
 		/// <summary>
@@ -91,11 +87,7 @@ namespace System.Linq {
 			public TSelect this[int index] => m_Selector(m_Source[index]);
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-			public IEnumerator<TSelect> GetEnumerator() {
-				foreach (TList item in m_Source) {
-					yield return m_Selector(item);
-				}
-			}
+			public IEnumerator<TSelect> GetEnumerator() => m_Source.Select(m_Selector).GetEnumerator();
 		}
 
 		/// <summary>
@@ -178,6 +170,9 @@ namespace System.Linq {
 			}
 
 			int i = 0;
+			// TODO use enumerator directly instead of foreach and avoid using Current.
+			// This avoids calling expensive selectors and stuff.
+			// Do this for all Count* functions.
 			foreach (T _ in source) {
 				i++;
 				if (i >= count) {
@@ -301,6 +296,21 @@ namespace System.Linq {
 		/// This function is not called Reverse to avoid naming conflicts with the aforementioned function.
 		/// </remarks>
 		public static IEnumerable<T> Backwards<T>(this IList<T> list) {
+			for (int i = list.Count - 1; i >= 0; i--) {
+				yield return list[i];
+			}
+		}
+
+		/// <summary>
+		/// Enumerates all items in an <see cref="IList{T}"/> in reverse order.
+		/// </summary>
+		/// <remarks>
+		/// This is much faster than <see cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/> as that function will enumerate the entire source and store the results,
+		/// and then yielding that in reverse. This function utilizes a reverse for loop over the <see cref="IReadOnlyList{T}"/>.
+		/// 
+		/// This function is not called Reverse to avoid naming conflicts with the aforementioned function.
+		/// </remarks>
+		public static IEnumerable<T> Backwards<T>(this IReadOnlyList<T> list) {
 			for (int i = list.Count - 1; i >= 0; i--) {
 				yield return list[i];
 			}
@@ -533,6 +543,39 @@ namespace System.Linq {
 					yield return item.Value;
 				}
 			}
+		}
+		public static IReadOnlyList<T?> ListCast<T>(this IList source) =>
+			new CastedReadOnlyList<T>(source);
+
+		private class CastedReadOnlyList<T> : IReadOnlyList<T?> {
+			private readonly IList m_Source;
+
+			public CastedReadOnlyList(IList source) {
+				m_Source = source;
+			}
+
+			public int Count => m_Source.Count;
+
+			public T? this[int index] => (T?) m_Source[index];
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+			public IEnumerator<T> GetEnumerator() => m_Source.Cast<T>().GetEnumerator();
+		}
+		
+		public static IReadOnlyCollection<T> CollectionCast<T>(this IList source) =>
+			new CastedReadOnlyCollection<T>(source);
+
+		private class CastedReadOnlyCollection<T> : IReadOnlyCollection<T> {
+			private readonly System.Collections.ICollection m_Source;
+
+			public CastedReadOnlyCollection(ICollection source) {
+				m_Source = source;
+			}
+
+			public int Count => m_Source.Count;
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+			public IEnumerator<T> GetEnumerator() => m_Source.Cast<T>().GetEnumerator();
 		}
 	}
 }
