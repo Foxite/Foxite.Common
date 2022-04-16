@@ -577,5 +577,16 @@ namespace System.Linq {
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 			public IEnumerator<T> GetEnumerator() => m_Source.Cast<T>().GetEnumerator();
 		}
+		
+		public static void Shuffle<T>(this IList<T> list, Random? rand = null) {
+			// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+
+			rand ??= new Random();
+			for (int i = list.Count; i > 1; i--) {
+				// Swap the item with a random item in the list that we didn't already go past
+				int swap = rand.Next(i + 1);
+				(list[swap], list[i]) = (list[i], list[swap]);
+			}
+		}
 	}
 }
