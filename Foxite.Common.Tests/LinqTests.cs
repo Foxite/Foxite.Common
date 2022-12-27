@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -29,12 +31,12 @@ public class LinqTests {
 
 	[Test]
 	public void ShuffleTest2() {
-		const int Tries = 50;
+		const int Tries = 3;
 		bool startPass = false;
 		bool endPass = false;
 		for (int i = 0; i < Tries; i++) {
-			int[] left = new int[1000];
-			int[] right = new int[1000];
+			int[] left = new int[3];
+			int[] right = new int[3];
 			for (int j = 0; j < left.Length; j++) {
 				left[j] = j;
 				right[j] = j;
@@ -59,5 +61,18 @@ public class LinqTests {
 		} else { // !startPass && endPass
 			Assert.Fail("Shuffle did not change the first item in the list within {0} tries", Tries);
 		}
+	}
+
+	[Test]
+	public void ShuffleTest3() {
+		for (int i = 0; i < 1000; i++) {
+			var l2 = new List<int>() { 1, 2, 3 };
+			l2.Shuffle();
+			if (l2[0] == 2) {
+				Assert.Pass();
+			}
+		}
+
+		Assert.Fail();
 	}
 }

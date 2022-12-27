@@ -582,7 +582,7 @@ namespace System.Linq {
 			// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
 
 			rand ??= new Random();
-			for (int i = list.Count - 1; i > 1; i--) {
+			for (int i = list.Count - 1; i > 0; i--) {
 				// Swap the item with a random item in the list that we didn't already go past
 				int swap = rand.Next(i + 1);
 				(list[swap], list[i]) = (list[i], list[swap]);
