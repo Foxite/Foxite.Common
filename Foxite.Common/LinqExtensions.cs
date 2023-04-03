@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq {
 	/// <summary>
@@ -400,9 +401,7 @@ namespace System.Linq {
 		/// - Otherwise, the return value of <paramref name="addFactory"/> will be added to <paramref name="dict"/> using <paramref name="key"/>, and then returned from this function.
 		/// </summary>
 		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> addFactory) where TKey : notnull {
-#pragma warning disable 8600
-			if (dict.TryGetValue(key, out TValue value)) {
-#pragma warning restore 8600
+			if (dict.TryGetValue(key, out TValue? value)) {
 				return value;
 			} else {
 				TValue ret = addFactory(key);
@@ -587,6 +586,51 @@ namespace System.Linq {
 				int swap = rand.Next(i + 1);
 				(list[swap], list[i]) = (list[i], list[swap]);
 			}
+		}
+	}
+		
+	public class ReadonlyDictionaryOfLists<TKey, TValue> : IReadOnlyDictionary<TKey, IReadOnlyList<TValue>> {
+		private readonly IReadOnlyDictionary<TKey, List<TValue>> m_ReadOnlyDictionaryImplementation;
+
+		public ReadonlyDictionaryOfLists(IReadOnlyDictionary<TKey, List<TValue>> readOnlyDictionaryImplementation) {
+			m_ReadOnlyDictionaryImplementation = readOnlyDictionaryImplementation;
+		}
+
+		public int Count => m_ReadOnlyDictionaryImplementation.Count;
+		public IReadOnlyList<TValue> this[TKey key] => m_ReadOnlyDictionaryImplementation[key];
+		public IEnumerable<TKey> Keys => m_ReadOnlyDictionaryImplementation.Keys;
+		public IEnumerable<IReadOnlyList<TValue>> Values => m_ReadOnlyDictionaryImplementation.Values;
+
+		public bool ContainsKey(TKey key) => m_ReadOnlyDictionaryImplementation.ContainsKey(key);
+		public IEnumerator<KeyValuePair<TKey, IReadOnlyList<TValue>>> GetEnumerator() => new Enumerator(m_ReadOnlyDictionaryImplementation.GetEnumerator());
+
+		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) m_ReadOnlyDictionaryImplementation).GetEnumerator();
+
+		public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out IReadOnlyList<TValue> value) {
+			bool ret = m_ReadOnlyDictionaryImplementation.TryGetValue(key, out List<TValue>? valueList);
+			value = valueList;
+			return ret;
+		}
+
+		private class Enumerator : IEnumerator<KeyValuePair<TKey, IReadOnlyList<TValue>>> {
+			private readonly IEnumerator<KeyValuePair<TKey, List<TValue>>> m_Implementation;
+			
+			public KeyValuePair<TKey, IReadOnlyList<TValue>> Current => new(m_Implementation.Current.Key, m_Implementation.Current.Value);
+			object? IEnumerator.Current => ((IEnumerator) m_Implementation).Current;
+
+			public Enumerator(IEnumerator<KeyValuePair<TKey, List<TValue>>> implementation) {
+				m_Implementation = implementation;
+			}
+
+			public bool MoveNext() => m_Implementation.MoveNext();
+			public void Reset() => m_Implementation.Reset();
+			public void Dispose() => m_Implementation.Dispose();
+		}
+	}
+
+	public static class DictionaryExtensions {
+		public static IReadOnlyDictionary<TKey, IReadOnlyList<TValue>> WrapReadonly<TKey, TValue>(this Dictionary<TKey, List<TValue>> source) where TKey : notnull {
+			return new ReadonlyDictionaryOfLists<TKey, TValue>(source);
 		}
 	}
 }
