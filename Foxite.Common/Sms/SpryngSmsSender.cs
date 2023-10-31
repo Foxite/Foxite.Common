@@ -12,6 +12,7 @@ namespace Foxite.Common.Sms {
 		private readonly string m_ApiKey;
 		private readonly string m_Originator;
 		private readonly string m_Route;
+		private readonly string m_EndpointUrl;
 
 		public SpryngSmsSender(HttpClient http, IOptions<SpryngOptions> optionsAccessor) {
 			m_Http = http;
@@ -20,10 +21,11 @@ namespace Foxite.Common.Sms {
 			m_ApiKey = options.ApiKey;
 			m_Originator = options.Originator;
 			m_Route = options.Route;
+			m_EndpointUrl = options.EndpointUrl;
 		}
 		
 		public async Task SendSmsAsync(string[] recipients, string content) {
-			var result = await m_Http.SendAsync(new HttpRequestMessage(HttpMethod.Post, "https://rest.spryngsms.com/v1/messages") {
+			var result = await m_Http.SendAsync(new HttpRequestMessage(HttpMethod.Post, m_EndpointUrl) {
 				Headers = {
 					Authorization = new AuthenticationHeaderValue("Bearer", m_ApiKey)
 				},
@@ -44,5 +46,6 @@ namespace Foxite.Common.Sms {
 		public string ApiKey { get; set; } = null!;
 		public string Originator { get; set; } = null!;
 		public string Route { get; set; } = null!;
+		public string EndpointUrl { get; set; } = "https://rest.spryngsms.com/v1/messages";
 	}
 }
