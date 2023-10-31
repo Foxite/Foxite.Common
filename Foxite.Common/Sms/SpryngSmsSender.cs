@@ -37,7 +37,12 @@ namespace Foxite.Common.Sms {
 					recipients = recipients
 				})
 			});
-			result.EnsureSuccessStatusCode();
+
+			if (!result.IsSuccessStatusCode) {
+				string response = await result.Content.ReadAsStringAsync();
+
+				throw new SmsException($"Request failed with status code {result.StatusCode} and body: {response}");
+			}
 		}
 	}
 
